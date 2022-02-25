@@ -1,0 +1,167 @@
+{
+	"info": {
+		"_postman_id": "d2e9a9a1-0cef-47f3-aba6-df4094182334",
+		"name": "Super Hero Challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Add new hero",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Peter Parker\",\n    \"alias\": \"Spider Man\",\n    \"origin\": \"Radioactive Spider bite during a science experiment endowed proportionate capabilities of an arachnid.\",\n    \"powers\": [\n        \"intelligence\", \n        \"strength\", \n        \"speed\", \n        \"durability\", \n        \"energy-projection\", \n        \"fighting-skills\"\n    ],\n    \"weapons\": [\n        \"synthetic-webbing\", \n        \"shocker-gauntlet\", \n        \"anti-gravity-gun\"\n    ],\n    \"associations\": [\n        \"Miguel\", \n        \"Miles\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9001/api/v1/heroes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"api",
+						"v1",
+						"heroes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find hero by property",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9001/api/v1/heroes/properties?property=power&value=flight",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"api",
+						"v1",
+						"heroes",
+						"properties"
+					],
+					"query": [
+						{
+							"key": "property",
+							"value": "power"
+						},
+						{
+							"key": "value",
+							"value": "flight"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find hero by name",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9001/api/v1/heroes/Tony%20Stark",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"api",
+						"v1",
+						"heroes",
+						"Tony%20Stark"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find all heroes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9001/api/v1/heroes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"api",
+						"v1",
+						"heroes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update hero",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Peter Parker\",\n    \"alias\": \"Spider Man\",\n    \"origin\": \"Radioactive Spider bite during a science experiment endowed proportionate capabilities of an arachnid.\",\n    \"powers\": [\n        \"intelligence\", \n        \"strength\", \n        \"speed\", \n        \"durability\", \n        \"energy-projection\", \n        \"fighting-skills\"\n    ],\n    \"weapons\": [\n        \"synthetic-webbing\", \n        \"shocker-gauntlet\", \n        \"anti-gravity-gun\"\n    ],\n    \"associations\": [\n        \"Miguel\", \n        \"Miles\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9001/api/v1/heroes/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"api",
+						"v1",
+						"heroes",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete hero",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9001/api/v1/heroes/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"api",
+						"v1",
+						"heroes",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
