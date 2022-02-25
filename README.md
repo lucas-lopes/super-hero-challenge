@@ -141,6 +141,63 @@ POST /api/v1/heroes
 }
 ```
 
+### Find All Heroes
+
+If you call the resource below, you will receive two heroes that was saved in advance to facilitate 
+your tests:
+
+```
+GET /api/v1/heroes
+```
+
+**Response example:**
+
+```json
+[
+    {
+        "alias": "Captain Marvel",
+        "name": "Carol Danvers",
+        "origin": "Exposed to Space Stone reactor overload",
+        "powers": [
+            "photon-blast",
+            "flight",
+            "super-strength",
+            "healing"
+        ],
+        "weapons": [],
+        "associations": [
+            "space-stone",
+            "skrulls",
+            "photon",
+            "kree",
+            "avengers"
+        ]
+    },
+    {
+        "alias": "Iron Man",
+        "name": "Tony Stark",
+        "origin": "Kidnapped in Afghanistan, created the first iron-man suit to escape.",
+        "powers": [
+            "genius-intelligence",
+            "wealth",
+            "flight"
+        ],
+        "weapons": [
+            "arc-reactor",
+            "iron-man-suit",
+            "iron-legion"
+        ],
+        "associations": [
+            "war-machine",
+            "avengers",
+            "jarvis",
+            "thanos",
+            "pepper-potts"
+        ]
+    }
+]
+```
+
 ### Find Hero By Name
 
 We can find a hero by name:
@@ -314,6 +371,8 @@ DELETE /api/v1/heroes/1
 This endpoint doesn't have response body, only a status code 204 if all happened with success.
 
 ---
+
+*Thank you for this opportunity. Made with love by Lucas Barbosa.*
 
 [//]: # (These are reference links used in the body of this note.)
 
