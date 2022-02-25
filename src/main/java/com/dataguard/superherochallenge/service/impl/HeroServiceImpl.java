@@ -1,11 +1,13 @@
 package com.dataguard.superherochallenge.service.impl;
 
+import com.dataguard.superherochallenge.adapter.HeroAdapter;
 import com.dataguard.superherochallenge.dto.HeroDto;
 import com.dataguard.superherochallenge.entity.Hero;
 import com.dataguard.superherochallenge.repository.HeroRepository;
 import com.dataguard.superherochallenge.service.HeroService;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class HeroServiceImpl implements HeroService {
 
     private final HeroRepository heroRepository;
+    private final HeroAdapter heroAdapter;
 
     @Override
     public HeroDto addNewHero(HeroDto heroDto) {
@@ -22,7 +25,14 @@ public class HeroServiceImpl implements HeroService {
 
     @Override
     public List<HeroDto> findAllHeroes() throws Exception {
-        return null;
+        try {
+            return heroRepository.findAll()
+                .stream()
+                .map(heroAdapter::adapterHeroToHeroDto)
+                .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
     }
 
     @Override
