@@ -1,4 +1,4 @@
-package com.dataguard.superherochallenge.impl;
+package com.dataguard.superherochallenge.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -190,7 +190,7 @@ class HeroServiceImplTest {
 
         assertThat(exception)
             .isInstanceOf(ObjectNotFoundException.class)
-            .hasMessage("Hero doesn't found");
+            .hasMessage("Hero doesn't find");
     }
 
     @Test

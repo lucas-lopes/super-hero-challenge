@@ -114,7 +114,7 @@ public class HeroServiceImpl implements HeroService {
         try {
             if (Optional.ofNullable(id).isPresent()) {
                 return heroRepository.findById(id)
-                    .orElseThrow(() -> new ObjectNotFoundException("Hero doesn't found"));
+                    .orElseThrow(() -> new ObjectNotFoundException("Hero doesn't find"));
             }
             throw new BadRequestException("Missing field id to find the hero");
         } catch (ObjectNotFoundException e) {
