@@ -1,0 +1,23 @@
+server:
+  port: 9001
+
+spring:
+  application:
+    name: super-hero-challenge
+  datasource:
+    url: jdbc:h2:mem:superherodb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    database-platfor: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
