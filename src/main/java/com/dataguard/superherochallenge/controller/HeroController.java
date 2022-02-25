@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,6 +47,12 @@ public class HeroController {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
             .path("/{name}").buildAndExpand(heroDto.getName()).toUri();
         return ResponseEntity.created(uri).body(heroDto);
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<HeroDto> updateHero(@PathVariable(value = "id") Long id, @RequestBody HeroDto heroDto) {
+        heroDto = heroService.updateHero(id, heroDto);
+        return ResponseEntity.ok().body(heroDto);
     }
 
 }

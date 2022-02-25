@@ -2,6 +2,7 @@ package com.dataguard.superherochallenge.adapter;
 
 import com.dataguard.superherochallenge.dto.HeroDto;
 import com.dataguard.superherochallenge.entity.Hero;
+import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -27,6 +28,22 @@ public class HeroAdapter {
             .weapons(hero.getWeapons())
             .associations(hero.getAssociations())
             .build();
+    }
+
+    public Hero adapterHeroToBeUpdated(Hero hero, HeroDto heroDto) {
+        return Hero.builder()
+            .id(hero.getId())
+            .name(checkIfIsNull(heroDto.getName()) ? heroDto.getName() : hero.getName())
+            .alias(checkIfIsNull(heroDto.getAlias()) ? heroDto.getAlias() : hero.getAlias())
+            .origin(checkIfIsNull(heroDto.getOrigin()) ? heroDto.getOrigin() : hero.getOrigin())
+            .powers(checkIfIsNull(heroDto.getPowers()) ? heroDto.getPowers() : hero.getPowers())
+            .weapons(checkIfIsNull(heroDto.getWeapons()) ? heroDto.getWeapons() : hero.getWeapons())
+            .associations(checkIfIsNull(heroDto.getAssociations()) ? heroDto.getAssociations() : hero.getAssociations())
+            .build();
+    }
+
+    private boolean checkIfIsNull(Object field) {
+        return Optional.ofNullable(field).isPresent();
     }
 
 }

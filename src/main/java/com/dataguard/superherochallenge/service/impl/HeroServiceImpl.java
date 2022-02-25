@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -125,7 +126,20 @@ public class HeroServiceImpl implements HeroService {
 
     @Override
     public HeroDto updateHero(Long heroId, HeroDto heroDto) {
-        return null;
+        try {
+            if (Optional.ofNullable(heroId).isPresent()) {
+                log.info("[updateHero] start updating hero");
+                val heroFound = findHeroById(heroId);
+                val hero = heroAdapter.adapterHeroToBeUpdated(heroFound, heroDto);
+
+                heroRepository.save(hero);
+                log.info("[updateHero] hero updated with success");
+                return heroAdapter.adapterHeroToHeroDto(hero);
+            }
+            throw new BadRequestException("Missing param id to get the user");
+        } catch (BadRequestException e) {
+            throw new BadRequestException(e.getMessage());
+        }
     }
 
     @Override
