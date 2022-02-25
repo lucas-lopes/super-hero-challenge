@@ -110,7 +110,17 @@ public class HeroServiceImpl implements HeroService {
 
     @Override
     public Hero findHeroById(Long id) {
-        return null;
+        try {
+            if (Optional.ofNullable(id).isPresent()) {
+                return heroRepository.findById(id)
+                    .orElseThrow(() -> new ObjectNotFoundException("Hero doesn't found"));
+            }
+            throw new BadRequestException("Missing field id to find the hero");
+        } catch (ObjectNotFoundException e) {
+            throw new ObjectNotFoundException(e.getMessage());
+        } catch (BadRequestException e1) {
+            throw new BadRequestException(e1.getMessage());
+        }
     }
 
     @Override
