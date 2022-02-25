@@ -4,8 +4,11 @@ import com.dataguard.superherochallenge.dto.HeroDto;
 import com.dataguard.superherochallenge.service.HeroService;
 import java.net.URI;
 import java.util.List;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +23,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RestController
 @RequestMapping("api/v1/heroes")
 @AllArgsConstructor
+@Validated
 public class HeroController {
+
+    private static final String MESSAGE = "is missing and is required";
 
     private final HeroService heroService;
 
@@ -36,14 +42,16 @@ public class HeroController {
     }
 
     @GetMapping(value = "/properties")
-    public ResponseEntity<List<HeroDto>> findHeroesByProperty(@RequestParam(value = "property") String property,
-                                                              @RequestParam(value = "value") String value) {
+    public ResponseEntity<List<HeroDto>> findHeroesByProperty(@RequestParam(value = "property")
+                                                              @NotBlank(message = "Property " + MESSAGE) String property,
+                                                              @RequestParam(value = "value")
+                                                              @NotBlank(message = "Value " + MESSAGE) String value) {
         var heroes = heroService.findHeroesByProperty(property, value);
         return ResponseEntity.ok(heroes);
     }
 
     @PostMapping
-    public ResponseEntity<HeroDto> addNewHero(@RequestBody HeroDto heroDto) {
+    public ResponseEntity<HeroDto> addNewHero(@Valid @RequestBody HeroDto heroDto) {
         heroDto = heroService.addNewHero(heroDto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
             .path("/{name}").buildAndExpand(heroDto.getName()).toUri();

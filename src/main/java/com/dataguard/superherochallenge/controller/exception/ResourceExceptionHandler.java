@@ -3,8 +3,12 @@ package com.dataguard.superherochallenge.controller.exception;
 import com.dataguard.superherochallenge.service.exception.BadRequestException;
 import com.dataguard.superherochallenge.service.exception.ConflictException;
 import com.dataguard.superherochallenge.service.exception.ObjectNotFoundException;
+import java.util.ArrayList;
+import java.util.stream.IntStream;
+import javax.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -29,12 +33,43 @@ public class ResourceExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<StandardError> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        var allErrors = ex.getBindingResult().getAllErrors();
+        String[] messages = new String[allErrors.size()];
+
+        IntStream.range(0, messages.length)
+            .forEach(i -> messages[i] = allErrors.get(i).getDefaultMessage());
+
+        var err = buildStandardError(HttpStatus.BAD_REQUEST, messages);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<StandardError> handleConstraintExceptions(ConstraintViolationException ex) {
+        var allErrors = new ArrayList<>(ex.getConstraintViolations());
+        String[] messages = new String[allErrors.size()];
+
+        IntStream.range(0, messages.length)
+            .forEach(i -> messages[i] = allErrors.get(i).getMessage());
+
+        var err = buildStandardError(HttpStatus.BAD_REQUEST, messages);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
     private StandardError buildStandardError(HttpStatus httpStatus, RuntimeException e) {
         return StandardError.builder()
             .status(httpStatus.value())
             .message(e.getMessage())
             .error(httpStatus.name())
-            .timestamp(System.currentTimeMillis())
+            .build();
+    }
+
+    private StandardError buildStandardError(HttpStatus httpStatus, String[] messages) {
+        return StandardError.builder()
+            .status(httpStatus.value())
+            .messages(messages)
+            .error(httpStatus.name())
             .build();
     }
 

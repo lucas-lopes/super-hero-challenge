@@ -63,32 +63,29 @@ public class HeroServiceImpl implements HeroService {
     @Override
     public List<HeroDto> findHeroesByProperty(String property, String value) {
         try {
-            if (Optional.ofNullable(property).isPresent() && Optional.ofNullable(value).isPresent()) {
-                log.info("[findHeroesByProperty] Finding heroes with property '{}' and value '{}'", property, value);
-                var heroProperty = HeroProperty.adapterStringToEnum(property);
+            log.info("[findHeroesByProperty] Finding heroes with property '{}' and value '{}'", property, value);
+            var heroProperty = HeroProperty.adapterStringToEnum(property);
 
-                if (Optional.ofNullable(heroProperty).isPresent()) {
-                    switch (heroProperty) {
-                        case POWER:
-                            return heroRepository.findByPower(value)
-                                .stream()
-                                .map(heroAdapter::adapterHeroToHeroDto)
-                                .collect(Collectors.toList());
-                        case WEAPON:
-                            return heroRepository.findByWeapon(value)
-                                .stream()
-                                .map(heroAdapter::adapterHeroToHeroDto)
-                                .collect(Collectors.toList());
-                        case ASSOCIATION:
-                            return heroRepository.findByAssociation(value)
-                                .stream()
-                                .map(heroAdapter::adapterHeroToHeroDto)
-                                .collect(Collectors.toList());
-                    }
+            if (Optional.ofNullable(heroProperty).isPresent()) {
+                switch (heroProperty) {
+                    case POWER:
+                        return heroRepository.findByPower(value)
+                            .stream()
+                            .map(heroAdapter::adapterHeroToHeroDto)
+                            .collect(Collectors.toList());
+                    case WEAPON:
+                        return heroRepository.findByWeapon(value)
+                            .stream()
+                            .map(heroAdapter::adapterHeroToHeroDto)
+                            .collect(Collectors.toList());
+                    case ASSOCIATION:
+                        return heroRepository.findByAssociation(value)
+                            .stream()
+                            .map(heroAdapter::adapterHeroToHeroDto)
+                            .collect(Collectors.toList());
                 }
-                throw new BadRequestException("The property informed doesn't exist: try power, weapon or association");
             }
-            throw new BadRequestException("Property and value are required fields");
+            throw new BadRequestException("The property informed doesn't exist: try power, weapon or association");
         } catch (BadRequestException e) {
             throw new BadRequestException(e.getMessage());
         }
