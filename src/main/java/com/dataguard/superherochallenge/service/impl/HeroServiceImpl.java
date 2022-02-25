@@ -7,6 +7,7 @@ import com.dataguard.superherochallenge.entity.HeroProperty;
 import com.dataguard.superherochallenge.repository.HeroRepository;
 import com.dataguard.superherochallenge.service.HeroService;
 import com.dataguard.superherochallenge.service.exception.BadRequestException;
+import com.dataguard.superherochallenge.service.exception.ConflictException;
 import com.dataguard.superherochallenge.service.exception.ObjectNotFoundException;
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +26,25 @@ public class HeroServiceImpl implements HeroService {
 
     @Override
     public HeroDto addNewHero(HeroDto heroDto) {
-        return null;
+        try {
+            log.info("[addNewHero] start adding new hero");
+            if (Optional.ofNullable(heroDto).isPresent()) {
+                var hero = heroAdapter.adapterHeroDtoToHero(heroDto);
+                var heroOptional = findHeroByName(hero.getName());
+
+                if (heroOptional.isEmpty()) {
+                    var heroAdded = heroRepository.save(hero);
+                    log.info("[addNewHero] hero {} added with success: ID {}", heroAdded.getName(), heroAdded.getId());
+                    return heroAdapter.adapterHeroToHeroDto(heroAdded);
+                }
+                throw new ConflictException("Hero already exists");
+            }
+            throw new BadRequestException("Missing the hero object");
+        } catch (ConflictException e) {
+            throw new ConflictException(e.getMessage());
+        } catch (BadRequestException e1) {
+            throw new BadRequestException(e1.getMessage());
+        }
     }
 
     @Override
