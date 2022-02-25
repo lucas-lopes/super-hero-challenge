@@ -144,6 +144,18 @@ public class HeroServiceImpl implements HeroService {
 
     @Override
     public void deleteHero(Long heroId) {
+        try {
+            if (Optional.ofNullable(heroId).isPresent()) {
+                log.info("[deleteHero] start deleting hero");
+                val hero = findHeroById(heroId);
 
+                heroRepository.delete(hero);
+                log.info("[deleteHero] hero deleted with success");
+            } else {
+                throw new BadRequestException("Missing param id to get the user");
+            }
+        } catch (BadRequestException e) {
+            throw new BadRequestException(e.getMessage());
+        }
     }
 }
