@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  super-hero-challenge:
+    build:
+      context: ./
+      dockerfile: docker/Dockerfile
+    container_name: "super-hero-challenge"
+    ports:
+      - "9001:9001"
+    networks:
+      - hero-network
+    restart: always
+
+networks:
+  hero-network:
+    driver: bridge
