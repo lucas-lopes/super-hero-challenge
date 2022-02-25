@@ -30,7 +30,7 @@ public class HeroServiceImpl implements HeroService {
             log.info("[addNewHero] start adding new hero");
             if (Optional.ofNullable(heroDto).isPresent()) {
                 var hero = heroAdapter.adapterHeroDtoToHero(heroDto);
-                var heroOptional = findHeroByName(hero.getName());
+                var heroOptional = heroRepository.findByName(hero.getName());
 
                 if (heroOptional.isEmpty()) {
                     var heroAdded = heroRepository.save(hero);
