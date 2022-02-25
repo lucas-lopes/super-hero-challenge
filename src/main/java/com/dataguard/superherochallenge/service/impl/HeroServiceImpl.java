@@ -3,6 +3,7 @@ package com.dataguard.superherochallenge.service.impl;
 import com.dataguard.superherochallenge.adapter.HeroAdapter;
 import com.dataguard.superherochallenge.dto.HeroDto;
 import com.dataguard.superherochallenge.entity.Hero;
+import com.dataguard.superherochallenge.entity.HeroProperty;
 import com.dataguard.superherochallenge.repository.HeroRepository;
 import com.dataguard.superherochallenge.service.HeroService;
 import com.dataguard.superherochallenge.service.exception.BadRequestException;
@@ -41,7 +42,36 @@ public class HeroServiceImpl implements HeroService {
 
     @Override
     public List<HeroDto> findHeroesByProperty(String property, String value) {
-        return null;
+        try {
+            if (Optional.ofNullable(property).isPresent() && Optional.ofNullable(value).isPresent()) {
+                log.info("[findHeroesByProperty] Finding heroes with property '{}' and value '{}'", property, value);
+                var heroProperty = HeroProperty.adapterStringToEnum(property);
+
+                if (Optional.ofNullable(heroProperty).isPresent()) {
+                    switch (heroProperty) {
+                        case POWER:
+                            return heroRepository.findByPower(value)
+                                .stream()
+                                .map(heroAdapter::adapterHeroToHeroDto)
+                                .collect(Collectors.toList());
+                        case WEAPON:
+                            return heroRepository.findByWeapon(value)
+                                .stream()
+                                .map(heroAdapter::adapterHeroToHeroDto)
+                                .collect(Collectors.toList());
+                        case ASSOCIATION:
+                            return heroRepository.findByAssociation(value)
+                                .stream()
+                                .map(heroAdapter::adapterHeroToHeroDto)
+                                .collect(Collectors.toList());
+                    }
+                }
+                throw new BadRequestException("The property informed doesn't exist: try power, weapon or association");
+            }
+            throw new BadRequestException("Property and value are required fields");
+        } catch (BadRequestException e) {
+            throw new BadRequestException(e.getMessage());
+        }
     }
 
     @Override
