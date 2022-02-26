@@ -73,7 +73,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:9001/api/v1/heroes/Tony%20Stark",
+					"raw": "http://localhost:9001/api/v1/heroes/names?name=Tony%20Stark",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -83,7 +83,13 @@
 						"api",
 						"v1",
 						"heroes",
-						"Tony%20Stark"
+						"names"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Tony%20Stark"
+						}
 					]
 				}
 			},
