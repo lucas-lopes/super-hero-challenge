@@ -31,7 +31,7 @@ public class HeroController {
     private final HeroService heroService;
 
     @GetMapping
-    public ResponseEntity<List<HeroDto>> findAllHeroes() throws Exception {
+    public ResponseEntity<List<HeroDto>> findAllHeroes() {
         return ResponseEntity.ok(heroService.findAllHeroes());
     }
 

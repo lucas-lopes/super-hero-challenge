@@ -1,6 +1,7 @@
 package com.dataguard.superherochallenge.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.dataguard.superherochallenge.adapter.HeroAdapter;
@@ -11,7 +12,6 @@ import com.dataguard.superherochallenge.service.HeroService;
 import com.dataguard.superherochallenge.service.exception.BadRequestException;
 import com.dataguard.superherochallenge.service.exception.ConflictException;
 import com.dataguard.superherochallenge.service.exception.ObjectNotFoundException;
-import com.dataguard.superherochallenge.service.impl.HeroServiceImpl;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -42,9 +42,9 @@ class HeroServiceImplTest {
 
     @Test
     @DisplayName("Should save a new hero with success")
-    void addNewHeroTest_shouldSaveNewHero() {
-        var newHeroDto = buildValidHeroDto();
-        var heroSaved = buildValidHero(1L);
+    void itShouldSaveNewHero() {
+        var newHeroDto = buildHeroDto();
+        var heroSaved = buildHero(1L);
 
         buildHeroToAdapter();
         when(heroRepository.findByName(Mockito.anyString())).thenReturn(Optional.empty());
@@ -63,8 +63,8 @@ class HeroServiceImplTest {
 
     @Test
     @DisplayName("Should throw bad request exception to try saving a new hero invalid")
-    void addNewHeroTest_shouldThrowBadRequestException() {
-        var hero = buildValidHero(1L);
+    void itShouldThrowBadRequestException() {
+        var hero = buildHero(1L);
 
         Throwable exception = Assertions.catchThrowable(() -> heroService.addNewHero(null));
 
@@ -72,14 +72,14 @@ class HeroServiceImplTest {
             .isInstanceOf(BadRequestException.class)
             .hasMessage("Missing the hero object");
 
-        Mockito.verify(heroRepository, Mockito.never()).save(hero);
+        verify(heroRepository, Mockito.never()).save(hero);
     }
 
     @Test
     @DisplayName("Should throw conflict exception to try saving a new hero existing")
-    void addNewHeroTest_shouldThrowConflictException() {
-        var newHeroDto = buildValidHeroDto();
-        var heroSaved = buildValidHero(1L);
+    void itShouldThrowConflictException() {
+        var newHeroDto = buildHeroDto();
+        var heroSaved = buildHero(1L);
 
         buildHeroToAdapter();
         when(heroRepository.findByName(Mockito.anyString())).thenReturn(Optional.of(heroSaved));
@@ -93,9 +93,9 @@ class HeroServiceImplTest {
 
     @Test
     @DisplayName("Should list all heroes")
-    void findAllHeroesTest_shouldListAllHeroes() throws Exception {
-        var hero1 = buildValidHero(1L);
-        var hero2 = buildValidHero(2L);
+    void itShouldListAllHeroes() {
+        var hero1 = buildHero(1L);
+        var hero2 = buildHero(2L);
 
         List<Hero> heroes = Arrays.asList(hero1, hero2);
 
@@ -103,15 +103,16 @@ class HeroServiceImplTest {
 
         var allHeroes = heroService.findAllHeroes();
 
-        assertThat(allHeroes).isNotNull();
-        assertThat(allHeroes).hasSize(2);
+        assertThat(allHeroes)
+            .isNotNull()
+            .hasSize(2);
     }
 
     @Test
     @DisplayName("Should get all heroes by property 'power' and value 'flight'")
-    void findHeroesByPropertyTest_shouldGetAllHeroesWithPropertyAndValue() {
-        var hero1 = buildValidHero(1L);
-        var hero2 = buildValidHero(2L);
+    void itShouldGetAllHeroesWithPowerProperty() {
+        var hero1 = buildHero(1L);
+        var hero2 = buildHero(2L);
 
         List<Hero> heroes = Arrays.asList(hero1, hero2);
         var propertyValue = "flight";
@@ -136,8 +137,8 @@ class HeroServiceImplTest {
 
     @Test
     @DisplayName("Should find a hero by name")
-    void findHeroByNameTest_shouldFindAHeroByName() {
-        var heroSaved = buildValidHero(1L);
+    void itShouldFindAHeroByName() {
+        var heroSaved = buildHero(1L);
 
         buildHeroToAdapter();
         when(heroRepository.findByName(Mockito.anyString())).thenReturn(Optional.of(heroSaved));
@@ -155,8 +156,8 @@ class HeroServiceImplTest {
     }
 
     @Test
-    @DisplayName("Should throw a BadRequestException if hero doesn't exists")
-    void findHeroByNameTest_shouldThrowBadRequestException() {
+    @DisplayName("Should throw a BadRequestException when hero name does not informed")
+    void itShouldThrowBadRequestExceptionWhenTheNameInformedIsNull() {
         Throwable exception = Assertions.catchThrowable(() -> heroService.findHeroByName(null));
 
         assertThat(exception)
@@ -166,8 +167,8 @@ class HeroServiceImplTest {
 
     @Test
     @DisplayName("Should find a hero by id")
-    void findHeroByIdTest_shouldFindAHeroById() {
-        var heroSaved = buildValidHero(1L);
+    void itShouldFindAHeroById() {
+        var heroSaved = buildHero(1L);
 
         buildHeroToAdapter();
         when(heroRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(heroSaved));
@@ -184,8 +185,8 @@ class HeroServiceImplTest {
     }
 
     @Test
-    @DisplayName("Should throw a ObjectNotFoundException if the hero by id doesn't exist")
-    void findHeroByIdTest_shouldThrowObjectNotFoundException() {
+    @DisplayName("Should throw a ObjectNotFoundException when hero does not exist")
+    void itShouldThrowObjectNotFoundExceptionWhenHeroDoesNotExist() {
         Throwable exception = Assertions.catchThrowable(() -> heroService.findHeroById(2L));
 
         assertThat(exception)
@@ -194,8 +195,8 @@ class HeroServiceImplTest {
     }
 
     @Test
-    @DisplayName("Should throw a BadRequest if id to find the hero wasn't informed")
-    void findHeroByIdTest_shouldThrowBadRequestException() {
+    @DisplayName("Should throw a BadRequestException when heroId was not informed")
+    void itShouldThrowBadRequestExceptionWhenHeroIdWasNotInformed() {
         Throwable exception = Assertions.catchThrowable(() -> heroService.findHeroById(null));
 
         assertThat(exception)
@@ -204,10 +205,10 @@ class HeroServiceImplTest {
     }
 
     @Test
-    @DisplayName("Should find a hero by id")
-    void updateHeroTest_shouldUpdateAHeroWithSuccess() {
+    @DisplayName("Should update a hero")
+    void itShouldUpdateAHero() {
         var heroId = 1L;
-        var heroSaved = buildValidHero(heroId);
+        var heroSaved = buildHero(heroId);
         var heroDto = buildHeroDtoToBeUpdated();
         var heroUpdated = buildHeroToBeUpdated(heroId);
 
@@ -232,7 +233,42 @@ class HeroServiceImplTest {
         assertThat(hero.getAssociations()).hasSize(1);
     }
 
-    private HeroDto buildValidHeroDto() {
+    @Test
+    @DisplayName("Should throw BadRequestException when try update hero with heroId null")
+    void itShouldThrowBadRequestExceptionWhenHeroIdIsNull() {
+        var heroDto = buildHeroDtoToBeUpdated();
+
+        Throwable exception = Assertions.catchThrowable(() -> heroService.updateHero(null, heroDto));
+
+        assertThat(exception)
+            .isInstanceOf(BadRequestException.class)
+            .hasMessage("Missing param id to get the user");
+    }
+
+    @Test
+    @DisplayName("Should delete a hero by heroId")
+    void itShouldDeleteAHero() {
+        var heroId = 1L;
+        var heroSaved = buildHero(heroId);
+
+        when(heroRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(heroSaved));
+
+        heroService.deleteHero(heroId);
+
+        verify(heroRepository).delete(heroSaved);
+    }
+
+    @Test
+    @DisplayName("Should throw BadRequestException when try delete hero with heroId null")
+    void itShouldThrowBadRequestExceptionWhenTryDeleteHeroWithoutHeroId() {
+        Throwable exception = Assertions.catchThrowable(() -> heroService.deleteHero(null));
+
+        assertThat(exception)
+            .isInstanceOf(BadRequestException.class)
+            .hasMessage("Missing param id to get the user");
+    }
+
+    private HeroDto buildHeroDto() {
         return HeroDto.builder()
             .name("Carol Danvers")
             .alias("Captain Marvel")
@@ -243,7 +279,7 @@ class HeroServiceImplTest {
             .build();
     }
 
-    private Hero buildValidHero(Long id) {
+    private Hero buildHero(Long id) {
         return Hero.builder()
             .id(id)
             .name("Carol Danvers")
@@ -279,23 +315,8 @@ class HeroServiceImplTest {
     }
 
     private void buildHeroToAdapter() {
-        var hero = Hero.builder()
-            .name("Carol Danvers")
-            .alias("Captain Marvel")
-            .origin("Exposed to Space Stone reactor overload")
-            .powers(new String[]{"photon-blast", "flight", "super-strength", "healing"})
-            .associations(new String[]{"space-stone", "skrulls", "photon", "kree", "avengers"})
-            .weapons(new String[0])
-            .build();
-
-        var heroDto = HeroDto.builder()
-            .name("Carol Danvers")
-            .alias("Captain Marvel")
-            .origin("Exposed to Space Stone reactor overload")
-            .powers(new String[]{"photon-blast", "flight", "super-strength", "healing"})
-            .associations(new String[]{"space-stone", "skrulls", "photon", "kree", "avengers"})
-            .weapons(new String[0])
-            .build();
+        var hero = buildHero(1L);
+        var heroDto = buildHeroDto();
 
         when(heroAdapter.adapterHeroToHeroDto(Mockito.any(Hero.class))).thenReturn(heroDto);
         when(heroAdapter.adapterHeroDtoToHero(Mockito.any(HeroDto.class))).thenReturn(hero);

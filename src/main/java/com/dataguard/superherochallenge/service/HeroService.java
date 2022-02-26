@@ -9,7 +9,7 @@ public interface HeroService {
 
     HeroDto addNewHero(final HeroDto heroDto);
 
-    List<HeroDto> findAllHeroes() throws Exception;
+    List<HeroDto> findAllHeroes();
 
     List<HeroDto> findHeroesByProperty(final String property, final String value);
 
