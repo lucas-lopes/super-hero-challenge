@@ -7,7 +7,7 @@ This application is an API responsible for doing the CRUD operations related to 
 ```
 POST /api/v1/heroes
 GET /api/v1/heroes
-GET /api/v1/heroes/{name}
+GET /api/v1/heroes/names?name={name}
 GET /api/v1/heroes/properties?property={property}&value={value}
 PUT /api/v1/heroes/{id}
 DELETE /api/v1/heroes/{id}
@@ -203,13 +203,13 @@ GET /api/v1/heroes
 We can find a hero by name:
 
 ```
-GET /api/v1/heroes/{name}
+GET /api/v1/heroes/names?name={name}
 ```
 
 **Request example:**
 
 ```
-GET /api/v1/heroes/Tony%20Stark
+GET /api/v1/heroes/names?name=Tony%20Stark
 ```
 
 **Response example:**
