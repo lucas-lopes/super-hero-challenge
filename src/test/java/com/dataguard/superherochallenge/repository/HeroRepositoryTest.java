@@ -7,13 +7,10 @@ import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 @DataJpaTest
 class HeroRepositoryTest {
 
@@ -25,14 +22,14 @@ class HeroRepositoryTest {
 
     @Test
     @DisplayName("Should return a Hero by name with success")
-    void findByNameTest_shouldReturnHeroByNameWithSuccess() {
+    void itShouldReturnHeroByNameWithSuccess() {
         var name = "Carol Danvers";
         var newHero = buildNewHero();
         testEntityManager.persist(newHero);
 
         var hero = heroRepository.findByName(name);
 
-        assertThat(hero.isPresent()).isTrue();
+        assertThat(hero).isPresent();
         assertThat(hero.get().getName()).isEqualTo("Carol Danvers");
         assertThat(hero.get().getAlias()).isEqualTo("Captain Marvel");
         assertThat(hero.get().getOrigin()).isEqualTo("Exposed to Space Stone reactor overload");
@@ -42,8 +39,8 @@ class HeroRepositoryTest {
     }
 
     @Test
-    @DisplayName("Should return a Hero by property 'power' and value 'flight'")
-    void findByPower_shouldReturnHeroByPropertyAndValue() {
+    @DisplayName("Should return a Hero by property 'power'")
+    void itShouldReturnHeroByPowerProperty() {
         var powerValue = "flight";
         var heroes = buildListOfHeroes();
         testEntityManager.persist(heroes.get(0));
@@ -71,8 +68,8 @@ class HeroRepositoryTest {
     }
 
     @Test
-    @DisplayName("Should return a Hero by property 'weapon' and value 'arc-reactor'")
-    void findByWeapon_shouldReturnHeroByPropertyAndValue() {
+    @DisplayName("Should return a Hero by property 'weapon'")
+    void itShouldReturnHeroByWeaponProperty() {
         var weaponValue = "arc-reactor";
         var heroes = buildListOfHeroes();
         testEntityManager.persist(heroes.get(0));
@@ -92,8 +89,8 @@ class HeroRepositoryTest {
     }
 
     @Test
-    @DisplayName("Should return a Hero by property 'association' and value 'avengers'")
-    void findByAssociation_shouldReturnHeroByPropertyAndValue() {
+    @DisplayName("Should return a Hero by property 'association'")
+    void itShouldReturnHeroByAssociationProperty() {
         var associationValue = "avengers";
         var heroes = buildListOfHeroes();
         testEntityManager.persist(heroes.get(0));
