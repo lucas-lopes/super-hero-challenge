@@ -35,8 +35,9 @@ public class HeroController {
         return ResponseEntity.ok(heroService.findAllHeroes());
     }
 
-    @GetMapping("/{name}")
-    public ResponseEntity<HeroDto> findHeroByName(@PathVariable(name = "name") String name) {
+    @GetMapping("/names")
+    public ResponseEntity<HeroDto> findHeroByName(@RequestParam(value = "name")
+                                                  @NotBlank(message = "Name " + MESSAGE) String name) {
         var heroDto = heroService.findHeroByName(name);
         return ResponseEntity.ok(heroDto.orElse(null));
     }

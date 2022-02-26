@@ -74,7 +74,7 @@ public class HeroServiceImpl implements HeroService {
                         .collect(Collectors.toList());
             }
         }
-        throw new BadRequestException("The property informed doesn't exist: try power, weapon or association");
+        throw new ObjectNotFoundException("The property informed doesn't exist: try power, weapon or association");
     }
 
     @Override
